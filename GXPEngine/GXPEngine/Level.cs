@@ -81,12 +81,14 @@ namespace GXPEngine
                 switch (obj.Name)
                 {
                     case "Player": // if the objects Name is equal to Player it creates a player
+                        /*
                         Player player;
                         player = new Player("barry.png", 7, 1);
                         player.x = obj.X;
                         player.y = obj.Y;
 
                         AddChild(player);
+                        */
                         break;
                 }
             }

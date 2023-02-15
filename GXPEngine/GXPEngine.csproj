@@ -36,12 +36,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Asteroid.cs" />
+    <Compile Include="Entities\AsteroidLarge.cs" />
+    <Compile Include="Entities\AsteroidMedium.cs" />
+    <Compile Include="Entities\AsteroidSmall.cs" />
+    <Compile Include="Entities\Bullet.cs" />
+    <Compile Include="Entities\Entity.cs" />
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\SpriteBatch.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />
-    <Compile Include="GXPEngine\Player.cs" />
+    <Compile Include="Entities\Player.cs" />
     <Compile Include="GXPEngine\Tiles.cs" />
     <Compile Include="GXPEngine\Level.cs" />
+    <Compile Include="GXPEngine\Utils\Timer.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GXPEngine\Core\Canvas.cs" />
     <Compile Include="GXPEngine\Game.cs" />

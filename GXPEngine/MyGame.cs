@@ -2,22 +2,38 @@ using System;                                   // System contains a lot of defa
 using GXPEngine;                                // GXPEngine contains the engine
 using System.Drawing;                           // System.Drawing contains drawing tools such as Color definitions
 using System.Collections.Generic;
+using GXPEngine.Entities;
 public class MyGame : Game
 {
-
-
     private string levelname = "Levels/Placeholder.tmx";
- 
 
-    public MyGame() : base(1440, 950, false)
+    Player player;
+
+
+    public MyGame() : base(500, 500, false)
     {
-        LoadLevel(levelname);
+        //LoadLevel(levelname);
+        player = new Player();
+        player.x = width / 2;
+        player.y = height / 2;
+        AddChild(player);
     }
 
 
     void Update()
     {
+        debug();
+    }
 
+    void debug()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            AsteroidLarge new_asteroid = new AsteroidLarge();
+            new_asteroid.x = width / 2;
+            new_asteroid.y = height / 2;
+            AddChild(new_asteroid);
+        }
     }
 
     static void Main()
