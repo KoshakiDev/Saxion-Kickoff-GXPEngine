@@ -6,9 +6,10 @@ using System.Text;
 
 namespace GXPEngine.Entities
 {
-    class Bullet : Entity
+    public class Bullet : Entity
     {
         private Timer timer;
+    
         public Bullet(float set_rotation, float set_x, float set_y) : base("sprites/bullet.png", 1, 1, 1)
         {
             SetOrigin(width / 2, height / 2);
@@ -18,15 +19,14 @@ namespace GXPEngine.Entities
 
             rotation = set_rotation;
 
-            move_speed = 2.5f;
+            move_speed = 0.25f;
             rotation_speed = 0.5f;
 
-            timer = new Timer(300, false, true);
+            timer = new Timer(3000, false, true);
             timer.Timeout += Hit;
 
             velocity.x = move_speed * Mathf.Cos(Mathf.DegreesToRadians(rotation));
             velocity.y = move_speed * Mathf.Sin(Mathf.DegreesToRadians(rotation));
-
         }
         public override void OnCollision(GameObject collider)
         {
@@ -34,6 +34,11 @@ namespace GXPEngine.Entities
             {
                 Hit();   
             }
+        }
+        public override void Hit()
+        {
+            base.Hit();
+
         }
         public override void Update()
         {

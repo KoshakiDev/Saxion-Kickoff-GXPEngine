@@ -24,6 +24,7 @@ namespace GXPEngine.Entities
                 int frames,
                 bool addCollider = true) : base(filePath, columns, rows, frames, true, addCollider)
         {
+            
 
         }
 

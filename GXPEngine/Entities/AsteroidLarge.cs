@@ -7,17 +7,23 @@ namespace GXPEngine.Entities
 {
     class AsteroidLarge: Asteroid
     {
-        public AsteroidLarge() : base("sprites/asteroid_large.png")
+        public AsteroidLarge(MyGame world) : base("sprites/asteroid_large.png")
         {
             move_speed = 0.01f;
+            destruction_reward = 500;
+            world_reference = world;
+
+            world_reference.connectAsteroid(this);
         }
         public override void Hit()
         {
+            
             float rotation_divide = 360 / 3;
             float current_rotation_divide = 0;
             for (int i = 0; i < 3; i++)
             {
-                AsteroidMedium new_asteroid = new AsteroidMedium();
+                AsteroidMedium new_asteroid = new AsteroidMedium(world_reference);
+
 
                 new_asteroid.x = x;
                 new_asteroid.y = y;

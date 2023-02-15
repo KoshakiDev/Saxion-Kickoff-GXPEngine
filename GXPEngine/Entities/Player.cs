@@ -12,8 +12,8 @@ namespace GXPEngine.Entities
         private Timer shot_delay_timer;
         public Player() : base("sprites/hitbox.png", 1, 1, 1)
         {
-            move_speed = 0.01f;
-            rotation_speed = 0.5f;
+            move_speed = 0.1f;
+            rotation_speed = 1.5f;
             shot_delay_timer = new Timer(300, true, false);
 
             SetOrigin(width / 2, height / 2);
@@ -54,15 +54,22 @@ namespace GXPEngine.Entities
         {
             if(shot_delay_timer.IsPaused)
             {
-                Bullet new_bullet = new Bullet(rotation, x, y);
+                Bullet new_bullet = new Bullet(rotation, 
+                        x + 10 * Mathf.Cos(Mathf.DegreesToRadians(rotation)), 
+                        y + 10 * Mathf.Sin(Mathf.DegreesToRadians(rotation)));
                 parent.AddChild(new_bullet);
                 shot_delay_timer = new Timer(200, false, false);
-
             }
         }
 
 
-
+        public override void OnCollision(GameObject collider)
+        {
+            if (collider is Asteroid)
+            {
+                Hit();
+            }
+        }
     }
 }
 

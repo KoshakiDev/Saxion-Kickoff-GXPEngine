@@ -7,9 +7,13 @@ namespace GXPEngine.Entities
 {
     class AsteroidSmall : Asteroid
     {
-        public AsteroidSmall() : base("sprites/asteroid_small.png")
+        public AsteroidSmall(MyGame world) : base("sprites/asteroid_small.png")
         {
-            move_speed = 1.0f;
+            move_speed = 0.25f;
+            world_reference = world;
+            destruction_reward = 125;
+
+            world_reference.connectAsteroid(this);
         }
         public override void Hit()
         {

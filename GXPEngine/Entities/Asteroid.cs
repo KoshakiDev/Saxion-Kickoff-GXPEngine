@@ -5,8 +5,13 @@ using System.Text;
 
 namespace GXPEngine.Entities
 {
-    class Asteroid: Entity
+    public class Asteroid: Entity
     {
+        public int destruction_reward = 0;
+        public event Action<int> UpdateScore;
+
+        public MyGame world_reference;
+
         public Asteroid(string filePath) : base(filePath, 1, 1, 1)
         {
             SetOrigin(width / 2, height / 2);
@@ -24,6 +29,8 @@ namespace GXPEngine.Entities
 
         public override void Hit()
         {
+            UpdateScore?.Invoke(destruction_reward);
+            world_reference.disconnectAsteroid(this);
             base.Hit();
         }
 
