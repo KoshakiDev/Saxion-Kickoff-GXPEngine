@@ -14,9 +14,10 @@ namespace GXPEngine.Entities
         */
         protected Vector2 velocity;
 
-
         protected float move_speed;
         protected float rotation_speed;
+
+        public int health;
         protected Entity(
                 string filePath,
                 int columns,
@@ -26,6 +27,18 @@ namespace GXPEngine.Entities
         {
             
 
+        }
+        public virtual void Damage(int amount)
+        {
+            health -= amount;
+            if (health <= 0)
+            {
+                Death();
+            }
+        }
+        public virtual void Heal(int amount)
+        {
+            health += amount;
         }
 
         public virtual void Update() 
@@ -81,7 +94,7 @@ namespace GXPEngine.Entities
             }
         }
 
-        public virtual void Hit() 
+        public virtual void Death() 
         { 
             LateDestroy(); 
         }

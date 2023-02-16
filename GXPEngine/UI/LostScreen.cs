@@ -28,7 +28,7 @@ namespace GXPEngine.UI
             //Canvas properties
             canvas.TextSize(25);
             canvas.Fill(255);
-            canvas.TextAlign(CenterMode.Min, CenterMode.Min);
+            canvas.TextAlign(CenterMode.Center, CenterMode.Center);
 
             //Adds canvas to display hierarchy
             AddChild(canvas);

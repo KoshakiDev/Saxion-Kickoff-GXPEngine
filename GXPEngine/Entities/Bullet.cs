@@ -23,26 +23,37 @@ namespace GXPEngine.Entities
             rotation_speed = 0.5f;
 
             timer = new Timer(3000, false, true);
-            timer.Timeout += Hit;
+            timer.Timeout += Death;
 
             velocity.x = move_speed * Mathf.Cos(Mathf.DegreesToRadians(rotation));
             velocity.y = move_speed * Mathf.Sin(Mathf.DegreesToRadians(rotation));
         }
+
         public override void OnCollision(GameObject collider)
         {
             if (collider is Asteroid)
             {
-                Hit();   
+                Death();   
             }
         }
-        public override void Hit()
+        public override void Death()
         {
-            base.Hit();
+            base.Death();
 
         }
         public override void Update()
         {
-            base.Update();
+            DestroyIfOutOfBounds();
+            Move();
+            //base.Update();
+        }
+        public virtual void DestroyIfOutOfBounds()
+        {
+            if (x >= game.width || x <= 0 ||
+                y >= game.height || y <= 0)
+            {
+                Death();
+            }
         }
     }
 }

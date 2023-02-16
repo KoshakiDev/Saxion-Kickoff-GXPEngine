@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace GXPEngine.Entities
 {
@@ -11,6 +12,7 @@ namespace GXPEngine.Entities
         public event Action<int> UpdateScore;
 
         public MyGame world_reference;
+        public int spawn_amount;
 
         public Asteroid(string filePath) : base(filePath, 1, 1, 1)
         {
@@ -23,15 +25,29 @@ namespace GXPEngine.Entities
         {
             if(collider is Bullet || collider is Player)
             {
-                Hit();
+                Damage(1);
             }
         }
 
-        public override void Hit()
+        public override void Death()
         {
+            for (int i = 0; i < 10; i++)
+            {
+                float speed = 5.0f;
+                string filepath = "sprites/particle_" + Utils.Random(1, 3) + ".png";
+                Particle newParticle = new Particle(filepath, BlendMode.NORMAL, 2000);
+                // An example of chaining:
+                newParticle.SetColor(Color.White, Color.White).
+                    SetScale(1.0f, 0.0f).
+                    SetVelocity(Utils.Random(-speed, speed), Utils.Random(-speed, speed));
+                //Console.WriteLine("Spawning particles");
+                newParticle.SetXY(Utils.Random(x, x + width), Utils.Random(y, y + height));
+                parent.LateAddChild(newParticle);
+            }
+            //Console.WriteLine("dying");
             UpdateScore?.Invoke(destruction_reward);
             world_reference.disconnectAsteroid(this);
-            base.Hit();
+            base.Death();
         }
 
         public override void Update()

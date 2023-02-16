@@ -48,6 +48,7 @@
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GXPEngine\Tiles.cs" />
     <Compile Include="GXPEngine\Level.cs" />
+    <Compile Include="GXPEngine\Utils\Particle.cs" />
     <Compile Include="GXPEngine\Utils\Timer.cs" />
     <Compile Include="MyGame.cs" />
     <Compile Include="GXPEngine\Core\Canvas.cs" />
@@ -89,5 +90,6 @@
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="UI\HUD.cs" />
     <Compile Include="UI\LostScreen.cs" />
+    <Compile Include="UI\Menu.cs" />
   </ItemGroup>
 </Project>

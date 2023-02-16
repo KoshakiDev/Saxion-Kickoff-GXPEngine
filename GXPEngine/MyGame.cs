@@ -15,7 +15,7 @@ public class MyGame : Game
     State state;
 
 
-    public MyGame() : base(800, 800, false)
+    public MyGame() : base(800, 800, false, false, 500, 500, false)
     {
         //LoadLevel(levelname);
         EnterMenuState();
@@ -89,15 +89,15 @@ public class MyGame : Game
     bool PlayState()
     {
         // Extra life
-        if (hud.score % 10000 == 0 && hud.score != last_recorded_extra_life_score)
+        if (hud.score % 2500 == 0 && hud.score != last_recorded_extra_life_score)
         {
             player.Heal(1);
             last_recorded_extra_life_score = hud.score;
         }
         // Gun Upgrade
-        if (hud.score % 50000 == 0 && hud.score != last_recorded_gun_upgrade_score)
+        if (hud.score % 5000 == 0 && hud.score != last_recorded_gun_upgrade_score)
         {
-            player.IsGunUpgraded = true;
+            player.UpgradeGun();
             last_recorded_gun_upgrade_score = hud.score;
         }
 
@@ -143,7 +143,7 @@ public class MyGame : Game
         return new Vector2(x_pos, y_pos);
     }
 
-    int asteroids_amount = 1;
+    int asteroids_amount = 4;
     void SpawnAsteroids()
     {
         for (int i = 0; i < asteroids_amount; i++)

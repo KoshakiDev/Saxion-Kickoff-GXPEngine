@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GXPEngine.Core;
 
 namespace GXPEngine.UI
 {
-    public class HUD: GameObject
+    public class Menu : GameObject
     {
         private readonly EasyDraw canvas;
 
@@ -19,7 +18,7 @@ namespace GXPEngine.UI
         public int health;
 
 
-        public HUD()
+        public Menu()
         {
             //Initializing variables
             canvas = new EasyDraw(game.width, game.height, false);
@@ -43,7 +42,7 @@ namespace GXPEngine.UI
             UpdateCanvas();
         }
 
-        
+
 
         public void UpdateScore(int amount)
         {
@@ -109,43 +108,4 @@ namespace GXPEngine.UI
             canvas.Text(health.ToString(), health_position.x, health_position.y);
         }
     }
-    /*
-    public class HeartHUD : AnimationSprite
-    {
-        public HeartHUD(string filename, int columns, int rows, TiledObject obj) : base("sprites/collectibles/heart/heart.png", 2, 1, 2)
-        {
-            _animationDelay = 120;
-            SetCycle(0, 2, _animationDelay);
-        }
-
-        protected void Update()
-        {
-            Animate(Time.deltaTime);
-        }
-
-        public bool IsOn()
-        {
-            if (alpha == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public void TurnOff()
-        {
-            visible = false;
-            alpha = 0;
-        }
-        public void TurnOn()
-        {
-            visible = true;
-            alpha = 1;
-        }
-    
-    }
-    */
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -13,14 +14,18 @@ namespace GXPEngine.Entities
             destruction_reward = 500;
             world_reference = world;
 
+            spawn_amount = 2;
+            health = 3;
+
             world_reference.connectAsteroid(this);
         }
-        public override void Hit()
+        public override void Death()
         {
             
-            float rotation_divide = 360 / 2;
-            float current_rotation_divide = 0;
-            for (int i = 0; i < 2; i++)
+
+            float rotation_divide = 360 / spawn_amount;
+            float current_rotation_divide = Utils.Random(0, 360);
+            for (int i = 0; i < spawn_amount; i++)
             {
                 AsteroidMedium new_asteroid = new AsteroidMedium(world_reference);
 
@@ -32,7 +37,8 @@ namespace GXPEngine.Entities
                 current_rotation_divide += rotation_divide;
                 parent.LateAddChild(new_asteroid);
             }
-            base.Hit();
+            base.Death();
         }
+
     }
 }

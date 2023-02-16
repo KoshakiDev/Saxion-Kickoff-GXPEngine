@@ -12,12 +12,14 @@ namespace GXPEngine.Entities
             move_speed = 0.25f;
             world_reference = world;
             destruction_reward = 125;
+            spawn_amount = 0;
+            health = 1;
 
             world_reference.connectAsteroid(this);
         }
-        public override void Hit()
+        public override void Death()
         {
-            base.Hit();
+            base.Death();
         }
     }
 }
