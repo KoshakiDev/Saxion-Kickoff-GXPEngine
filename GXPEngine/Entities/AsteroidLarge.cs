@@ -18,9 +18,9 @@ namespace GXPEngine.Entities
         public override void Hit()
         {
             
-            float rotation_divide = 360 / 3;
+            float rotation_divide = 360 / 2;
             float current_rotation_divide = 0;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 AsteroidMedium new_asteroid = new AsteroidMedium(world_reference);
 

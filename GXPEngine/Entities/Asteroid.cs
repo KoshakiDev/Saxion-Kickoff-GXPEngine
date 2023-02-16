@@ -21,7 +21,7 @@ namespace GXPEngine.Entities
 
         public override void OnCollision(GameObject collider)
         {
-            if(collider is Bullet)
+            if(collider is Bullet || collider is Player)
             {
                 Hit();
             }

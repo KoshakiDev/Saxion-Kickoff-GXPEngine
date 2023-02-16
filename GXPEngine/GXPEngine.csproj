@@ -88,5 +88,6 @@
     <Compile Include="GXPEngine\SoLoud\Soloud.cs" />
     <Compile Include="GXPEngine\SoLoud\SoloudSoundSystem.cs" />
     <Compile Include="UI\HUD.cs" />
+    <Compile Include="UI\LostScreen.cs" />
   </ItemGroup>
 </Project>

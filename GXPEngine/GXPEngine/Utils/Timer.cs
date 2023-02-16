@@ -22,7 +22,7 @@ namespace GXPEngine
             this.paused = paused;
             this.destroyOnFinished = destroyOnFinished;
             startTime = Time.now;
-            game.AddChild(this);
+            game.LateAddChild(this);
         }
 
         void Update()

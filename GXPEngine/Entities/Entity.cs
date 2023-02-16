@@ -60,8 +60,10 @@ namespace GXPEngine.Entities
 
         public virtual void Move()
         {
-            MoveUntilCollision(0, velocity.y * Time.deltaTime);
-            MoveUntilCollision(velocity.x * Time.deltaTime, 0);
+            x += velocity.x * Time.deltaTime;
+            y += velocity.y * Time.deltaTime;
+            //MoveUntilCollision(0, velocity.y * Time.deltaTime);
+            //MoveUntilCollision(velocity.x * Time.deltaTime, 0);
         }
 
         public virtual void OnCollision(GameObject collider)

@@ -12,8 +12,11 @@ namespace GXPEngine.UI
 
         private Vector2 score_position;
 
+        private Vector2 health_position;
+
         //private HeartHUD[] hearts;
         public int score;
+        public int health;
 
 
         public HUD()
@@ -24,6 +27,8 @@ namespace GXPEngine.UI
             //Monetary Gains
             score = 0;
             score_position = new Vector2(32, 16);
+
+            health_position = new Vector2(32, 32);
 
 
             //Canvas properties
@@ -38,11 +43,17 @@ namespace GXPEngine.UI
             UpdateCanvas();
         }
 
-
+        
 
         public void UpdateScore(int amount)
         {
             score += amount;
+            UpdateCanvas();
+        }
+        public void UpdateHealth(int amount)
+        {
+            health = amount;
+            Console.WriteLine("health updated");
             UpdateCanvas();
         }
         /*
@@ -96,6 +107,7 @@ namespace GXPEngine.UI
         {
             canvas.ClearTransparent();
             canvas.Text(score.ToString(), score_position.x, score_position.y);
+            canvas.Text(health.ToString(), health_position.x, health_position.y);
         }
     }
     /*
