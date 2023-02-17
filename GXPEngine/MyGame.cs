@@ -10,10 +10,14 @@ public class MyGame : Game
 {
     public HUD hud;
     LostScreen lost_screen;
+    Menu menu_screen;
     Player player;
     Pivot AsteroidContainer;
     State state;
+    Sound button_click = new Sound("sounds/button_click.wav");
+    Sound game_over = new Sound("sounds/game_over.wav");
 
+    int current_highscore = 0;
 
     public MyGame() : base(800, 800, false, false, 500, 500, false)
     {
@@ -52,12 +56,15 @@ public class MyGame : Game
 
     void EnterMenuState()
     {
+        menu_screen = new Menu(current_highscore);
+        AddChild(menu_screen);
         state = State.Menu;
     }
     bool MenuState()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            button_click.Play();
             ExitMenuState();
             EnterPlayState();
         }
@@ -65,7 +72,7 @@ public class MyGame : Game
     }
     void ExitMenuState()
     {
-        
+        RemoveChild(menu_screen);   
     }
     void EnterPlayState()
     {
@@ -126,19 +133,19 @@ public class MyGame : Game
         int side = Utils.Random(1, 4);
         if (side == 1)
         {
-            x_pos = 0;
+            x_pos = 1;
         }
         if (side == 2)
         {
-            y_pos = 0;
+            y_pos = 1;
         }
         if (side == 3)
         {
-            x_pos = width;
+            x_pos = width - 1;
         }
         if (side == 4)
         {
-            y_pos = height;
+            y_pos = height - 1;
         }
         return new Vector2(x_pos, y_pos);
     }
@@ -148,12 +155,12 @@ public class MyGame : Game
     {
         for (int i = 0; i < asteroids_amount; i++)
         {
-            AsteroidLarge new_asteroid = new AsteroidLarge(this);
+            AsteroidLarge new_asteroid = new AsteroidLarge(this, player);
 
             Vector2 position = GetRandomPosition();
             new_asteroid.x = position.x;
             new_asteroid.y = position.y;
-
+            new_asteroid.flying_direction_rotation = Utils.Random(0, 360);
             AsteroidContainer.AddChild(new_asteroid);
         }
     }
@@ -180,12 +187,14 @@ public class MyGame : Game
     {
         lost_screen = new LostScreen(hud.score);
         AddChild(lost_screen);
+        game_over.Play();
         state = State.Lost;
     }
     bool LostState()
     {
         if (Input.GetMouseButtonDown(0))
         {
+            button_click.Play();
             ExitLostState();
             EnterMenuState();
         }
@@ -194,6 +203,10 @@ public class MyGame : Game
     void ExitLostState()
     {
         RemoveChild(lost_screen);
+        if(current_highscore < hud.score)
+        {
+            current_highscore = hud.score;
+        }
         hud.score = 0;
     }
 

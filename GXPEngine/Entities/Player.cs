@@ -25,7 +25,10 @@ namespace GXPEngine.Entities
         private Timer immunity_timer;
         int immunityDuration = 1000;
 
-
+        Sound gunshot = new Sound("sounds/gunshot.wav");
+        Sound health_bonus = new Sound("sounds/health_bonus.wav");
+        Sound gun_upgrade = new Sound("sounds/gun_upgrade.wav");
+        Sound player_damage = new Sound("sounds/player_damage.wav");
 
         public Player() : base("sprites/hitbox.png", 1, 1, 1)
         {
@@ -116,6 +119,7 @@ namespace GXPEngine.Entities
         {
             if(shot_delay_timer.IsPaused)
             {
+                gunshot.Play();
                 switch(gun_upgrade_level)
                 {
                     case 1:
@@ -134,6 +138,7 @@ namespace GXPEngine.Entities
 
         public void UpgradeGun()
         {
+            gun_upgrade.Play();
             gun_upgrade_timer = new Timer(gun_upgrade_duration, false, false);
             gun_upgrade_level = (int)Mathf.Clamp(last_gun_upgrade_level + 1, 1, 3);
             last_gun_upgrade_level = gun_upgrade_level;
@@ -179,6 +184,7 @@ namespace GXPEngine.Entities
 
         public override void Heal(int amount)
         {
+            health_bonus.Play();
             base.Heal(amount);
             UpdateHealth?.Invoke(health);
         }
@@ -186,6 +192,7 @@ namespace GXPEngine.Entities
         {
             if (immune)
                 return;
+            player_damage.Play();
             health -= amount;
             immunity_timer = new Timer(immunityDuration);
             immune = true;

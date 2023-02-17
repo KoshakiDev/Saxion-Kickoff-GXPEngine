@@ -8,11 +8,12 @@ namespace GXPEngine.Entities
 {
     class AsteroidLarge: Asteroid
     {
-        public AsteroidLarge(MyGame world) : base("sprites/asteroid_large.png")
+        public AsteroidLarge(MyGame world, Player player) : base("sprites/asteroid_large.png")
         {
             move_speed = 0.01f;
             destruction_reward = 500;
             world_reference = world;
+            player_reference = player;
 
             spawn_amount = 2;
             health = 3;
@@ -27,13 +28,13 @@ namespace GXPEngine.Entities
             float current_rotation_divide = Utils.Random(0, 360);
             for (int i = 0; i < spawn_amount; i++)
             {
-                AsteroidMedium new_asteroid = new AsteroidMedium(world_reference);
+                AsteroidMedium new_asteroid = new AsteroidMedium(world_reference , player_reference);
 
 
                 new_asteroid.x = x;
                 new_asteroid.y = y;
 
-                new_asteroid.rotation = current_rotation_divide;
+                new_asteroid.flying_direction_rotation = current_rotation_divide;
                 current_rotation_divide += rotation_divide;
                 parent.LateAddChild(new_asteroid);
             }

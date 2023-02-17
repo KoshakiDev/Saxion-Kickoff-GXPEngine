@@ -7,10 +7,12 @@ namespace GXPEngine.Entities
 {
     class AsteroidSmall : Asteroid
     {
-        public AsteroidSmall(MyGame world) : base("sprites/asteroid_small.png")
+        public AsteroidSmall(MyGame world, Player player) : base("sprites/asteroid_small.png")
         {
             move_speed = 0.25f;
             world_reference = world;
+
+            player_reference = player;
             destruction_reward = 125;
             spawn_amount = 0;
             health = 1;
