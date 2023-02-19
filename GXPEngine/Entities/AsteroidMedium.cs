@@ -14,9 +14,10 @@ namespace GXPEngine.Entities
             world_reference = world;
 
             player_reference = player;
-            destruction_reward = 250;
+            destruction_reward = 50;
             spawn_amount = 3;
-            health = 2;
+            max_health = 2;
+            health = max_health;
 
             world_reference.connectAsteroid(this);
         }
@@ -34,7 +35,7 @@ namespace GXPEngine.Entities
                 new_asteroid.y = y;
 
 
-                new_asteroid.flying_direction_rotation = current_rotation_divide;
+                new_asteroid.angle_of_movement = current_rotation_divide;
                 current_rotation_divide += rotation_divide;
                 parent.LateAddChild(new_asteroid);
             }

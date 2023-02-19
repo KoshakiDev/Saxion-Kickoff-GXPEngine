@@ -18,6 +18,11 @@ namespace GXPEngine.Entities
         protected float rotation_speed;
 
         public int health;
+        public int max_health;
+        public AnimationSprite sprite;
+        public bool mirrored = false;
+        public float angle_of_movement = 0;
+
         protected Entity(
                 string filePath,
                 int columns,
@@ -25,8 +30,7 @@ namespace GXPEngine.Entities
                 int frames,
                 bool addCollider = true) : base(filePath, columns, rows, frames, true, addCollider)
         {
-            
-
+            _animationDelay = 100;
         }
         public virtual void Damage(int amount)
         {
@@ -38,13 +42,23 @@ namespace GXPEngine.Entities
         }
         public virtual void Heal(int amount)
         {
-            health += amount;
+            health = (int)Mathf.Clamp(health + amount, 0, max_health);
         }
 
         public virtual void Update() 
         {
+            AdjustAngleOfMovement();
             Move();
             WrapAround();
+        }
+
+        void AdjustAngleOfMovement()
+        {
+            angle_of_movement = angle_of_movement % 360;
+            if (angle_of_movement < 0)
+            {
+                angle_of_movement += 360;
+            }
         }
 
         public virtual void WrapAround()
@@ -75,8 +89,29 @@ namespace GXPEngine.Entities
         {
             x += velocity.x * Time.deltaTime;
             y += velocity.y * Time.deltaTime;
-            //MoveUntilCollision(0, velocity.y * Time.deltaTime);
-            //MoveUntilCollision(velocity.x * Time.deltaTime, 0);
+            if((angle_of_movement >= 0 && angle_of_movement <= 90) || 
+               (angle_of_movement >= 270 && angle_of_movement <= 360) )
+            {
+                mirrored = false;
+            }
+            else if (angle_of_movement >= 90 && angle_of_movement <= 270)
+            {
+                mirrored = true;
+            }
+        }
+
+        public void AnimateSpriteModel()
+        {
+            sprite.Animate(Time.deltaTime);
+
+            if (mirrored)
+            {
+                sprite.Mirror(true, false);
+            }
+            else
+            {
+                sprite.Mirror(false, false);
+            }
         }
 
         public virtual void OnCollision(GameObject collider)

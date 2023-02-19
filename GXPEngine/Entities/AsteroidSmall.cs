@@ -13,9 +13,10 @@ namespace GXPEngine.Entities
             world_reference = world;
 
             player_reference = player;
-            destruction_reward = 125;
+            destruction_reward = 100;
             spawn_amount = 0;
-            health = 1;
+            max_health = 1;
+            health = max_health;
 
             world_reference.connectAsteroid(this);
         }

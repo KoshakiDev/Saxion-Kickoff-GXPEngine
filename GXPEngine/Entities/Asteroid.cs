@@ -10,7 +10,6 @@ namespace GXPEngine.Entities
     {
         public int destruction_reward = 0;
         public event Action<int> UpdateScore;
-        public float flying_direction_rotation = 0;
         int follow_distance = 250;
 
         private Sound hit = new Sound("sounds/hit.wav");
@@ -62,8 +61,8 @@ namespace GXPEngine.Entities
 
         public override void Update()
         {
-            velocity.x = move_speed * Mathf.Cos(Mathf.DegreesToRadians(flying_direction_rotation));
-            velocity.y = move_speed * Mathf.Sin(Mathf.DegreesToRadians(flying_direction_rotation));
+            velocity.x = move_speed * Mathf.Cos(Mathf.DegreesToRadians(angle_of_movement));
+            velocity.y = move_speed * Mathf.Sin(Mathf.DegreesToRadians(angle_of_movement));
             base.Update();
             if (DistanceTo(player_reference) <= follow_distance && (follow_timer == null || follow_timer.finished))
             {
@@ -71,7 +70,7 @@ namespace GXPEngine.Entities
                 float new_x = Mathf.Normalize(player_reference.x - x, 0, 1);
                 float new_y = Mathf.Normalize(player_reference.y - y, 0, 1);
                 float angle_in_radians = Mathf.Atan2(new_y, new_x);
-                flying_direction_rotation = (angle_in_radians / Mathf.PI) * 180.0f;
+                angle_of_movement = (angle_in_radians / Mathf.PI) * 180.0f;
 
                 follow_timer = new Timer(5000, false, false);
             }

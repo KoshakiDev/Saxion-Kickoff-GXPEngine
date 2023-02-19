@@ -96,7 +96,7 @@ public class MyGame : Game
     bool PlayState()
     {
         // Extra life
-        if (hud.score % 2500 == 0 && hud.score != last_recorded_extra_life_score)
+        if (hud.score % 10000 == 0 && hud.score != last_recorded_extra_life_score)
         {
             player.Heal(1);
             last_recorded_extra_life_score = hud.score;
@@ -160,7 +160,7 @@ public class MyGame : Game
             Vector2 position = GetRandomPosition();
             new_asteroid.x = position.x;
             new_asteroid.y = position.y;
-            new_asteroid.flying_direction_rotation = Utils.Random(0, 360);
+            new_asteroid.angle_of_movement = Utils.Random(0, 360);
             AsteroidContainer.AddChild(new_asteroid);
         }
     }
@@ -180,8 +180,10 @@ public class MyGame : Game
         RemoveChild(hud);
         RemoveChild(AsteroidContainer);
 
-        asteroids_amount = 1;
-       
+        asteroids_amount = 4;
+        last_recorded_extra_life_score = 0;
+        last_recorded_gun_upgrade_score = 0;
+
     }
     void EnterLostState()
     {
@@ -240,3 +242,31 @@ public class MyGame : Game
         new MyGame().Start();
     }
 }
+
+/*
+
+//Use keyboardmessage template in Arduino
+
+#include "Keyboard.h"
+const int buttonW = 3; //Input pin for pushbutton
+int previousButtonWState = HIGH;
+
+void setup()
+{
+    pinMode(buttonW, INPUT);
+    Keyboard.begin();
+}
+
+
+void loop(){
+    int buttonWState = digitalRead(buttonW);
+    if(buttonWState != previousButtonWState && buttonWState == HIGH)
+    {
+        Keyboard.press('w');    
+    }
+    previousButtonWState = buttonWState;
+    
+    Keyboard.releaseAll();
+}
+
+*/
