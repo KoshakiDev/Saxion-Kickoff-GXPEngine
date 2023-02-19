@@ -18,6 +18,8 @@ namespace GXPEngine.UI
         public int score;
         public int health;
 
+        AnimationSprite awaiting_wave_image;
+
 
         public HUD()
         {
@@ -54,6 +56,16 @@ namespace GXPEngine.UI
         {
             health = amount;
             UpdateCanvas();
+        }
+
+        public void CreateAwaitingWaveImage()
+        {
+            awaiting_wave_image = new AnimationSprite("sprites/new_wave.png", 1, 1, 1, false, false);
+            AddChild(awaiting_wave_image);
+        }
+        public void DeleteAwaitingWaveImage()
+        {
+            RemoveChild(awaiting_wave_image);
         }
         /*
         public void SubtractHealth(int amount)

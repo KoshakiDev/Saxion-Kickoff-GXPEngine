@@ -14,6 +14,11 @@ public class MyGame : Game
     Player player;
     Pivot AsteroidContainer;
     State state;
+    PlayStates play_state;
+
+    Timer await_wave_timer;
+    int await_wave_duration = 2500;
+
     Sound button_click = new Sound("sounds/button_click.wav");
     Sound game_over = new Sound("sounds/game_over.wav");
 
@@ -90,40 +95,72 @@ public class MyGame : Game
         AddChild(AsteroidContainer);
 
         state = State.Play;
+        play_state = PlayStates.AwaitingWave;
+        EnterAwaitingWaveState();
+
     }
     int last_recorded_extra_life_score = 0;
     int last_recorded_gun_upgrade_score = 0;
     bool PlayState()
     {
-        // Extra life
-        if (hud.score % 10000 == 0 && hud.score != last_recorded_extra_life_score)
-        {
-            player.Heal(1);
-            last_recorded_extra_life_score = hud.score;
-        }
-        // Gun Upgrade
-        if (hud.score % 5000 == 0 && hud.score != last_recorded_gun_upgrade_score)
-        {
-            player.UpgradeGun();
-            last_recorded_gun_upgrade_score = hud.score;
-        }
-
-
-        if (AsteroidContainer.GetChildCount() == 0)
-        {
-            SpawnAsteroids();
-            asteroids_amount += 2;
-        }
-        if (player.health <= 0)
-        {
-            ExitPlayState();
-            EnterLostState();
-        }
+        PlayStateMachine();
         return true;
     }
 
+    void PlayStateMachine()
+    {
+        switch (play_state)
+        {
+            case PlayStates.currentPlay:
+                // Extra life
+                if (hud.score % 10000 == 0 && hud.score != last_recorded_extra_life_score)
+                {
+                    player.Heal(1);
+                    last_recorded_extra_life_score = hud.score;
+                }
+                // Gun Upgrade
+                if (hud.score % 5000 == 0 && hud.score != last_recorded_gun_upgrade_score)
+                {
+                    player.UpgradeGun();
+                    last_recorded_gun_upgrade_score = hud.score;
+                }
+                if (AsteroidContainer.GetChildCount() == 0)
+                {
+                    EnterAwaitingWaveState();
+                }
+                if (player.health <= 0)
+                {
+                    ExitPlayState();
+                    EnterLostState();
+                }
+                break;
+            case PlayStates.AwaitingWave:
+                if (await_wave_timer == null || await_wave_timer.finished)
+                {
+                    SpawnAsteroids();
+                    asteroids_amount += 2;
+                    ExitAwaitingWaveState();
+                    EnterCurrentPlayState();
+                }
+                break;
+        }
+    }
+    void EnterAwaitingWaveState()
+    {
+        await_wave_timer = new Timer(await_wave_duration);
+        play_state = PlayStates.AwaitingWave;
+        hud.CreateAwaitingWaveImage();
+    }
 
-    
+    void ExitAwaitingWaveState()
+    {
+        hud.DeleteAwaitingWaveImage();
+    }
+    void EnterCurrentPlayState()
+    {
+        play_state = PlayStates.currentPlay;
+    }
+
     Vector2 GetRandomPosition()
     {
         int y_pos = Utils.Random(0, height);
@@ -230,7 +267,11 @@ public class MyGame : Game
                 break;
         }
     }
-
+    private enum PlayStates
+    {
+        currentPlay,
+        AwaitingWave,
+    }
     private enum State
     {
         Menu,
