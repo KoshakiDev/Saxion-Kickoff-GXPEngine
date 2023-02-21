@@ -12,7 +12,6 @@ namespace GXPEngine.Entities
         public event Action<int> UpdateScore;
         int follow_distance = 250;
 
-        private Sound hit = new Sound("sounds/hit.wav");
         private Sound death = new Sound("sounds/death.wav");
 
 
@@ -33,6 +32,8 @@ namespace GXPEngine.Entities
         {
             if(collider is Bullet || collider is Player)
             {
+                Sound hit = new Sound("sounds/hit/hit_" + Utils.Random(1, 3) + ".wav");
+
                 hit.Play();
                 Damage(1);
             }

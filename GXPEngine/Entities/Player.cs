@@ -32,7 +32,7 @@ namespace GXPEngine.Entities
         private Timer immunity_timer;
         int immunityDuration = 1000;
 
-        Sound gunshot = new Sound("sounds/gunshot.wav");
+        
         Sound health_bonus = new Sound("sounds/health_bonus.wav");
         Sound gun_upgrade = new Sound("sounds/gun_upgrade.wav");
         Sound player_damage = new Sound("sounds/player_damage.wav");
@@ -152,6 +152,7 @@ namespace GXPEngine.Entities
         {
             if(shot_delay_timer.IsPaused)
             {
+                Sound gunshot = new Sound("sounds/gunshot/gunshot_" + Utils.Random(1, 4) + ".wav");
                 gunshot.Play();
                 switch(gun_upgrade_level)
                 {

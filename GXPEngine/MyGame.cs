@@ -25,7 +25,6 @@ public class MyGame : Game
     Timer await_wave_timer;
     int await_wave_duration = 2500;
 
-    Sound button_click = new Sound("sounds/button_click.wav");
     Sound game_over = new Sound("sounds/game_over.wav");
 
     int current_highscore = 0;
@@ -79,6 +78,7 @@ public class MyGame : Game
     {
         if (Input.GetMouseButtonDown(0) || Input.GetKey(Key.SPACE))
         {
+            Sound button_click = new Sound("sounds/button_click/click" + Utils.Random(1, 2) + ".wav");
             button_click.Play();
             ExitMenuState();
             EnterPlayState();
@@ -243,6 +243,7 @@ public class MyGame : Game
     {
         if (Input.GetMouseButtonDown(0) || Input.GetKey(Key.SPACE))
         {
+            Sound button_click = new Sound("sounds/button_click/click" + Utils.Random(1, 2) + ".wav");
             button_click.Play();
             ExitLostState();
             EnterMenuState();
