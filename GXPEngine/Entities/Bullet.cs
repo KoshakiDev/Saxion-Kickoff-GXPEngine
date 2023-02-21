@@ -10,8 +10,21 @@ namespace GXPEngine.Entities
     {
         private Timer timer;
     
-        public Bullet(float set_rotation, float set_x, float set_y) : base("sprites/bullet.png", 1, 1, 1)
+        public Bullet(float set_rotation, float set_x, float set_y) : base("sprites/icons/bullet_hitbox.png", 1, 1, 1)
         {
+
+            sprite = new AnimationSprite("sprites/icons/bullet.png", 1, 1, 1, true, false)
+            {
+                alpha = 1
+                //width = 16,
+                //height = 16
+            };
+            sprite.SetOrigin(sprite.width / 2, sprite.height / 2);
+            sprite.scaleX = sprite.scaleY = DEFAULT_SCALE * 0.25f;
+            AddChild(sprite);
+
+            //sprite.SetCycle(0, 4, _animationDelay);
+
             SetOrigin(width / 2, height / 2);
 
             x = set_x;

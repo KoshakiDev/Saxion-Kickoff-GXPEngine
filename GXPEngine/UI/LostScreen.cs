@@ -22,12 +22,12 @@ namespace GXPEngine.UI
 
             //Monetary Gains
             score = set_score;
-            score_position = new Vector2(game.width / 2, game.height / 2);
+            score_position = new Vector2(game.width / 2, game.height / 4);
 
             
             //Canvas properties
-            canvas.TextSize(25);
-            canvas.Fill(255);
+            canvas.TextSize(48);
+            canvas.Fill(244, 210, 228, 255);
             canvas.TextAlign(CenterMode.Center, CenterMode.Center);
 
             //Adds canvas to display hierarchy
@@ -45,6 +45,7 @@ namespace GXPEngine.UI
         private void UpdateCanvas()
         {
             canvas.ClearTransparent();
+            canvas.TextFont(Utils.LoadFont("TEENAGEANGST.ttf", 64f));
             canvas.Text("YOUR SCORE: " + score.ToString(), score_position.x, score_position.y);
         }
 

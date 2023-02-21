@@ -13,6 +13,7 @@ namespace GXPEngine.Entities
         NOTE TO SELF: Rotation uses degrees, Mathf only accepts radians. Convert rotation to radians.
         */
         protected Vector2 velocity;
+        public float DEFAULT_SCALE = 0.5f;
 
         protected float move_speed;
         protected float rotation_speed;
@@ -23,7 +24,7 @@ namespace GXPEngine.Entities
         public bool mirrored = false;
         public float angle_of_movement = 0;
 
-        protected Entity(
+        public Entity(
                 string filePath,
                 int columns,
                 int rows,
@@ -31,6 +32,8 @@ namespace GXPEngine.Entities
                 bool addCollider = true) : base(filePath, columns, rows, frames, true, addCollider)
         {
             _animationDelay = 100;
+            alpha = 0;
+            //scaleX = scaleY = DEFAULT_SCALE;
         }
         public virtual void Damage(int amount)
         {
@@ -48,6 +51,7 @@ namespace GXPEngine.Entities
         public virtual void Update() 
         {
             AdjustAngleOfMovement();
+            AnimateSpriteModel();
             Move();
             WrapAround();
         }
@@ -116,17 +120,7 @@ namespace GXPEngine.Entities
 
         public virtual void OnCollision(GameObject collider)
         {
-            // this checks if the collided object is am object from the background layer
-            if (collider.name == "Background")
-            {
-                return;
-            }
-            // this checks for collisions with tiles on the foreground
-            if (collider is Tiles)
-            {
-                //    Grounded = true;
-                //    fallingvelocity = 0;
-            }
+            
         }
 
         public virtual void Death() 

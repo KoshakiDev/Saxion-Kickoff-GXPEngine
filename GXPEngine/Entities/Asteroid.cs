@@ -38,13 +38,46 @@ namespace GXPEngine.Entities
             }
         }
 
+        public void DropItem()
+        {
+            ItemPickup item = ChooseItem();
+            item.x = x;
+            item.y = y;
+            parent.LateAddChild(item);
+        }
+
+        public ItemPickup ChooseItem()
+        {
+            //if(true)
+            if (Utils.Random(1, 100) <= 25)
+            {
+                HealthPickup new_item = new HealthPickup();
+                return new_item;
+            }
+            else if (Utils.Random(1, 100) <= 50)
+            {
+                GunPickup new_item = new GunPickup();
+                return new_item;
+            }
+            else
+            {
+                HealthPickup new_item = new HealthPickup();
+                return new_item;
+            }
+        }
+
         public override void Death()
         {
+            //if(true)
+            if(Utils.Random(1, 100) <= 25)
+            {
+                DropItem();
+            }
             death.Play();
             for (int i = 0; i < 10; i++)
             {
                 float speed = 5.0f;
-                string filepath = "sprites/particle_" + Utils.Random(1, 3) + ".png";
+                string filepath = "sprites/icons/particle_" + Utils.Random(1, 3) + ".png";
                 Particle newParticle = new Particle(filepath, BlendMode.NORMAL, 2000);
                 // An example of chaining:
                 newParticle.SetColor(Color.White, Color.White).

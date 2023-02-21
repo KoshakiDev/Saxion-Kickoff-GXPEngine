@@ -18,14 +18,15 @@ namespace GXPEngine.UI
         public int score;
         public int health;
 
-        AnimationSprite awaiting_wave_image;
-
+        bool show_new_wave_text = false;
+        //int wave_counter;
 
         public HUD()
         {
             //Initializing variables
             canvas = new EasyDraw(game.width, game.height, false);
 
+            //wave_counter = 0;
             //Monetary Gains
             score = 0;
             score_position = new Vector2(32, 16);
@@ -34,8 +35,9 @@ namespace GXPEngine.UI
 
 
             //Canvas properties
+
             canvas.TextSize(28);
-            canvas.Fill(255);
+            canvas.Fill(244, 210, 228, 255);
             canvas.TextAlign(CenterMode.Min, CenterMode.Min);
 
             //Adds canvas to display hierarchy
@@ -60,12 +62,14 @@ namespace GXPEngine.UI
 
         public void CreateAwaitingWaveImage()
         {
-            awaiting_wave_image = new AnimationSprite("sprites/new_wave.png", 1, 1, 1, false, false);
-            AddChild(awaiting_wave_image);
+            show_new_wave_text = true;
+            UpdateCanvas();
+            //AddChild(awaiting_wave_image);
         }
         public void DeleteAwaitingWaveImage()
         {
-            RemoveChild(awaiting_wave_image);
+            show_new_wave_text = false;
+            UpdateCanvas();
         }
         /*
         public void SubtractHealth(int amount)
@@ -117,6 +121,18 @@ namespace GXPEngine.UI
         private void UpdateCanvas()
         {
             canvas.ClearTransparent();
+            if (show_new_wave_text)
+            {
+                
+                canvas.TextSize(64);
+                canvas.TextFont(Utils.LoadFont("TEENAGEANGST.ttf", 128f, System.Drawing.FontStyle.Bold));
+                canvas.TextAlign(CenterMode.Center, CenterMode.Center);
+
+                canvas.Text("New Wave Incoming!", game.width / 2, game.height / 2);
+
+                canvas.TextAlign(CenterMode.Min, CenterMode.Min);
+            }
+            canvas.TextFont(Utils.LoadFont("TEENAGEANGST.ttf", 48f));
             canvas.Text(score.ToString(), score_position.x, score_position.y);
             canvas.Text(health.ToString(), health_position.x, health_position.y);
         }

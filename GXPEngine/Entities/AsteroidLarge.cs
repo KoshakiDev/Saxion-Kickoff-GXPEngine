@@ -8,25 +8,27 @@ namespace GXPEngine.Entities
 {
     class AsteroidLarge: Asteroid
     {
-        public AsteroidLarge(MyGame world, Player player) : base("sprites/asteroid_large.png")
+        public AsteroidLarge(MyGame world, Player player) : base("sprites/enemy/large_hitbox.png")
         {
-            move_speed = 0.01f;
+            move_speed = 0.05f;
             destruction_reward = 20;
             world_reference = world;
             player_reference = player;
 
-            //alpha = 0;
-            sprite = new AnimationSprite("sprites/asteroid_large-Sheet.png", 4, 1, 4, true, false)
+            sprite = new AnimationSprite("sprites/enemy/enemy1.png", 8, 1, 8, true, false)
             {
                 alpha = 1
                 //width = 16,
                 //height = 16
-            };
-            AddChild(sprite);
-            sprite.y -= width / 2;
-            sprite.x -= height / 2;
+            };            
+            sprite.SetOrigin(sprite.width / 2, sprite.height / 2);
+            sprite.scaleX = sprite.scaleY = DEFAULT_SCALE * 1.4f;
 
-            sprite.SetCycle(0, 4, _animationDelay);
+            AddChild(sprite);
+
+            sprite.SetCycle(0, 8, _animationDelay);
+
+
 
 
             spawn_amount = 2;
@@ -38,7 +40,6 @@ namespace GXPEngine.Entities
         public override void Update()
         {
             base.Update();
-            AnimateSpriteModel();
         }
         public override void Death()
         {

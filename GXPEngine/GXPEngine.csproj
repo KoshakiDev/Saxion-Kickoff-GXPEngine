@@ -32,6 +32,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -42,12 +43,16 @@
     <Compile Include="Entities\AsteroidSmall.cs" />
     <Compile Include="Entities\Bullet.cs" />
     <Compile Include="Entities\Entity.cs" />
+    <Compile Include="Entities\GunPickup.cs" />
+    <Compile Include="Entities\HealthPickup.cs" />
+    <Compile Include="Entities\ItemPickup.cs" />
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\SpriteBatch.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="GXPEngine\Tiles.cs" />
     <Compile Include="GXPEngine\Level.cs" />
+    <Compile Include="GXPEngine\Utils\Background.cs" />
     <Compile Include="GXPEngine\Utils\Particle.cs" />
     <Compile Include="GXPEngine\Utils\Timer.cs" />
     <Compile Include="MyGame.cs" />

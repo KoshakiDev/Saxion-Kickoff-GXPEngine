@@ -12,8 +12,7 @@ namespace GXPEngine.UI
 
         private Vector2 highscore_position;
 
-        private Vector2 title_position;
-
+        
         //private HeartHUD[] hearts;
         public int highscore;
         
@@ -25,14 +24,13 @@ namespace GXPEngine.UI
 
             //Monetary Gains
             highscore = set_highscore;
-            highscore_position = new Vector2(game.width / 2, game.height / 3 + 32);
-
-            title_position = new Vector2(game.width / 2, game.height / 3);
+            highscore_position = new Vector2(game.width / 2, game.height / 4);
 
 
             //Canvas properties
-            canvas.TextSize(28);
-            canvas.Fill(255);
+            canvas.TextSize(48);
+
+            canvas.Fill(244, 210, 228, 255);
             canvas.TextAlign(CenterMode.Center, CenterMode.Center);
 
             //Adds canvas to display hierarchy
@@ -46,8 +44,8 @@ namespace GXPEngine.UI
         private void UpdateCanvas()
         {
             canvas.ClearTransparent();
+            canvas.TextFont(Utils.LoadFont("TEENAGEANGST.ttf", 72f));
             canvas.Text("HIGH SCORE: " + highscore.ToString(), highscore_position.x, highscore_position.y);
-            canvas.Text("Wrath of the Plush Demo", title_position.x, title_position.y);
         }
     }
 }

@@ -5,6 +5,8 @@ using System.Text;
 using GXPEngine.Entities;
 using GXPEngine.Core;
 
+using System.IO.Ports;
+
 namespace GXPEngine.Entities
 {
     public class Player : Entity
@@ -35,22 +37,22 @@ namespace GXPEngine.Entities
         Sound gun_upgrade = new Sound("sounds/gun_upgrade.wav");
         Sound player_damage = new Sound("sounds/player_damage.wav");
 
-        public Player() : base("sprites/hitbox.png", 1, 1, 1)
+        public Player() : base("sprites/player/player_hitbox.png", 1, 1, 1)
         {
-            
-
-            move_speed = 0.1f;
+            move_speed = 0.2f;
             rotation_speed = 2.0f;
             shot_delay_timer = new Timer(shot_delay_1, true, false);
 
-            sprite = new AnimationSprite("sprites/Player-SpriteSheet-Idle.png", 2, 2, 4, true, false)
+            
+
+            sprite = new AnimationSprite("sprites/player/player1.png", 8, 1, 8, true, false)
             {
                 alpha = 1
                 //width = 16,
                 //height = 16
             };
             sprite.SetOrigin(sprite.width / 2, sprite.height / 2);
-            sprite.scaleX = sprite.scaleY = 0.1f;
+            sprite.scaleX = sprite.scaleY = DEFAULT_SCALE * 0.75f;
             AddChild(sprite);
             
             sprite.SetCycle(0, 4, _animationDelay);
@@ -58,13 +60,17 @@ namespace GXPEngine.Entities
             SetOrigin(width / 2, height / 2);
 
             gun_pivot = new Pivot();
-            gun = new AnimationSprite("sprites/gun.png", 1, 1, 1, false, false);
+
+            gun = new AnimationSprite("sprites/player/gun_1.png", 1, 4, 4, false, false);
             gun.SetOrigin(0, gun.height / 2);
-            gun.scaleX = gun.scaleY = 0.05f;
+
+            gun.scaleX = gun.scaleY = DEFAULT_SCALE;
             gun_pivot.AddChild(gun);
 
-
+            
             AddChild(gun_pivot);
+            
+
 
             max_health = 3;
             health = max_health;
@@ -76,7 +82,6 @@ namespace GXPEngine.Entities
             UpdateVelocity();
             ApplyFriction();
             UpdateInformation();
-            AnimateSpriteModel();
         }
         void ApplyFriction()
         {
@@ -100,17 +105,11 @@ namespace GXPEngine.Entities
         }
         void UpdateInformation()
         {
-            if (gun_upgrade_timer == null || gun_upgrade_timer.finished)
-            {
-                gun_upgrade_level = 1;
-            }
             
-
             if (immunity_timer == null || immunity_timer.finished)
             {
                 immune = false;
                 sprite.alpha = 1;
-
             }
             else
             {
@@ -174,27 +173,36 @@ namespace GXPEngine.Entities
         {
             gun_upgrade.Play();
             gun_upgrade_timer = new Timer(gun_upgrade_duration, false, false);
+
+            gun_upgrade_timer.Timeout += DegradeGun;
+
             gun_upgrade_level = (int)Mathf.Clamp(last_gun_upgrade_level + 1, 1, 3);
             last_gun_upgrade_level = gun_upgrade_level;
 
+            
+        }
+
+        public void DegradeGun()
+        {
+            gun_upgrade_level = 1;
         }
 
         void GunLevel1()
         {
-            SpawnBullet(new Vector2(15, 15), 0);
+            SpawnBullet(new Vector2(gun.width, gun.width), 0);
             shot_delay_timer = new Timer(shot_delay_1, false, false);
         }
         void GunLevel2()
         {
-            SpawnBullet(new Vector2(15, 15), 90);
-            SpawnBullet(new Vector2(15, 15), -90);
+            SpawnBullet(new Vector2(gun.width, gun.width), 5);
+            SpawnBullet(new Vector2(gun.width, gun.width), -5);
             shot_delay_timer = new Timer(shot_delay_2, false, false);
         }
         void GunLevel3()
         {
-            SpawnBullet(new Vector2(15, 15), 0);
-            SpawnBullet(new Vector2(15, 15), 90);
-            SpawnBullet(new Vector2(15, 15), -90);
+            SpawnBullet(new Vector2(gun.width, gun.width), 0);
+            SpawnBullet(new Vector2(gun.width, gun.width), 5);
+            SpawnBullet(new Vector2(gun.width, gun.width), -5);
             shot_delay_timer = new Timer(shot_delay_3, false, false);
         }
 

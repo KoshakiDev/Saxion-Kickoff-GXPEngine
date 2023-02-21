@@ -6,6 +6,9 @@ using GXPEngine.Entities;
 using GXPEngine.UI;
 using GXPEngine.Core;
 
+//using System.Threading;
+using System.IO.Ports;
+
 public class MyGame : Game
 {
     public HUD hud;
@@ -16,6 +19,9 @@ public class MyGame : Game
     State state;
     PlayStates play_state;
 
+
+    Background current_background; 
+
     Timer await_wave_timer;
     int await_wave_duration = 2500;
 
@@ -24,10 +30,11 @@ public class MyGame : Game
 
     int current_highscore = 0;
 
-    public MyGame() : base(800, 800, false, false, 500, 500, false)
+    public MyGame() : base(1600, 1200, false, false, 1600 / 2, 1200 / 2, false)
     {
         //LoadLevel(levelname);
         EnterMenuState();
+        //EnterLostState();
     }
 
 
@@ -61,13 +68,16 @@ public class MyGame : Game
 
     void EnterMenuState()
     {
+        current_background = new Background("sprites/backgrounds/startscreenf.png");
+        AddChild(current_background);
+
         menu_screen = new Menu(current_highscore);
         AddChild(menu_screen);
         state = State.Menu;
     }
     bool MenuState()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetKey(Key.SPACE))
         {
             button_click.Play();
             ExitMenuState();
@@ -77,6 +87,7 @@ public class MyGame : Game
     }
     void ExitMenuState()
     {
+        RemoveChild(current_background);
         RemoveChild(menu_screen);   
     }
     void EnterPlayState()
@@ -87,20 +98,25 @@ public class MyGame : Game
         hud = new HUD();
         AsteroidContainer = new Pivot();
 
+        current_background = new Background("sprites/backgrounds/bg1.png");
+
+
+
         player.UpdateHealth += hud.UpdateHealth;
         hud.UpdateHealth(player.health);
 
+        AddChild(current_background);
         AddChild(player);
-        AddChild(hud);
         AddChild(AsteroidContainer);
+        AddChild(hud);
+
+
 
         state = State.Play;
         play_state = PlayStates.AwaitingWave;
         EnterAwaitingWaveState();
 
     }
-    int last_recorded_extra_life_score = 0;
-    int last_recorded_gun_upgrade_score = 0;
     bool PlayState()
     {
         PlayStateMachine();
@@ -112,18 +128,6 @@ public class MyGame : Game
         switch (play_state)
         {
             case PlayStates.currentPlay:
-                // Extra life
-                if (hud.score % 10000 == 0 && hud.score != last_recorded_extra_life_score)
-                {
-                    player.Heal(1);
-                    last_recorded_extra_life_score = hud.score;
-                }
-                // Gun Upgrade
-                if (hud.score % 5000 == 0 && hud.score != last_recorded_gun_upgrade_score)
-                {
-                    player.UpgradeGun();
-                    last_recorded_gun_upgrade_score = hud.score;
-                }
                 if (AsteroidContainer.GetChildCount() == 0)
                 {
                     EnterAwaitingWaveState();
@@ -138,7 +142,7 @@ public class MyGame : Game
                 if (await_wave_timer == null || await_wave_timer.finished)
                 {
                     SpawnAsteroids();
-                    asteroids_amount += 2;
+                    asteroids_amount += 1;
                     ExitAwaitingWaveState();
                     EnterCurrentPlayState();
                 }
@@ -187,7 +191,7 @@ public class MyGame : Game
         return new Vector2(x_pos, y_pos);
     }
 
-    int asteroids_amount = 4;
+    int asteroids_amount = 2;
     void SpawnAsteroids()
     {
         for (int i = 0; i < asteroids_amount; i++)
@@ -217,21 +221,27 @@ public class MyGame : Game
         RemoveChild(hud);
         RemoveChild(AsteroidContainer);
 
-        asteroids_amount = 4;
-        last_recorded_extra_life_score = 0;
-        last_recorded_gun_upgrade_score = 0;
+        RemoveChild(current_background);
+
+        asteroids_amount = 2;
 
     }
     void EnterLostState()
     {
         lost_screen = new LostScreen(hud.score);
+        //lost_screen = new LostScreen(0);
+
+
+        current_background = new Background("sprites/backgrounds/gameoverf.png");
+        AddChild(current_background);
         AddChild(lost_screen);
+
         game_over.Play();
         state = State.Lost;
     }
     bool LostState()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetKey(Key.SPACE))
         {
             button_click.Play();
             ExitLostState();
@@ -241,6 +251,7 @@ public class MyGame : Game
     }
     void ExitLostState()
     {
+        RemoveChild(current_background);
         RemoveChild(lost_screen);
         if(current_highscore < hud.score)
         {
@@ -280,6 +291,32 @@ public class MyGame : Game
     }
     static void Main()
     {
+        /*
+        SerialPort port = new SerialPort();
+        port.PortName = "/dev/cu.usbmodem1202";
+
+        //port.PortName = "COM4";
+        port.BaudRate = 9600;
+        port.RtsEnable = true;
+        port.DtrEnable = true;
+        port.Open();
+        while (true)
+        {
+            string line = port.ReadLine(); // read separated values
+                                           //string line = port.ReadExisting(); // when using characters
+            if (line != "")
+            {
+                Console.WriteLine("Read from port: " + line);
+
+            }
+
+            if (Console.KeyAvailable)
+            {
+                ConsoleKeyInfo key = Console.ReadKey();
+                port.Write(key.KeyChar.ToString());  // writing a string to Arduino
+            }
+        }
+        */
         new MyGame().Start();
     }
 }

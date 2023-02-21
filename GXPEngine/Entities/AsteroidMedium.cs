@@ -7,7 +7,7 @@ namespace GXPEngine.Entities
 {
     class AsteroidMedium : Asteroid
     {
-        public AsteroidMedium(MyGame world, Player player) : base("sprites/asteroid_medium.png")
+        public AsteroidMedium(MyGame world, Player player) : base("sprites/enemy/medium_hitbox.png")
         {
             move_speed = 0.1f;
 
@@ -15,7 +15,24 @@ namespace GXPEngine.Entities
 
             player_reference = player;
             destruction_reward = 50;
-            spawn_amount = 3;
+
+            sprite = new AnimationSprite("sprites/enemy/enemy3.png", 10, 1, 10, true, false)
+            {
+                alpha = 1
+                //width = 16,
+                //height = 16
+            };
+
+            sprite.SetOrigin(sprite.width / 2, sprite.height / 2);
+            sprite.scaleX = sprite.scaleY = DEFAULT_SCALE * 1.2f;
+
+            AddChild(sprite);
+
+
+            sprite.SetCycle(0, 10, _animationDelay);
+
+
+            spawn_amount = 2;
             max_health = 2;
             health = max_health;
 
@@ -25,8 +42,9 @@ namespace GXPEngine.Entities
         {
             
             float rotation_divide = 360 / spawn_amount;
-            float current_rotation_divide = 0;
-            for(int i = 0; i < spawn_amount; i++)
+
+            float current_rotation_divide = Utils.Random(0, 360);
+            for (int i = 0; i < spawn_amount; i++)
             {
                 AsteroidSmall new_asteroid = new AsteroidSmall(world_reference , player_reference);
 
