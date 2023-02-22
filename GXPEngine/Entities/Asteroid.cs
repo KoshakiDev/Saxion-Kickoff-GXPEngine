@@ -49,10 +49,9 @@ namespace GXPEngine.Entities
 
         public ItemPickup ChooseItem()
         {
-            //if(true)
             if (Utils.Random(1, 100) <= 25)
             {
-                HealthPickup new_item = new HealthPickup();
+                ShieldPickup new_item = new ShieldPickup();
                 return new_item;
             }
             else if (Utils.Random(1, 100) <= 50)
@@ -70,7 +69,7 @@ namespace GXPEngine.Entities
         public override void Death()
         {
             //if(true)
-            if(Utils.Random(1, 100) <= 25)
+            if(Utils.Random(1, 100) <= 5)
             {
                 DropItem();
             }

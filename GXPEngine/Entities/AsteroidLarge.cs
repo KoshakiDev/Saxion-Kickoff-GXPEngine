@@ -15,7 +15,7 @@ namespace GXPEngine.Entities
             world_reference = world;
             player_reference = player;
 
-            sprite = new AnimationSprite("sprites/enemy/enemy1.png", 8, 1, 8, true, false)
+            sprite = new AnimationSprite("sprites/enemy/enemy" +Utils.Random(1, 3) + ".png", 8, 1, 8, true, false)
             {
                 alpha = 1
                 //width = 16,

@@ -112,6 +112,7 @@ public class MyGame : Game
 
 
 
+        wave_counter = 1;
         state = State.Play;
         play_state = PlayStates.AwaitingWave;
         EnterAwaitingWaveState();
@@ -123,14 +124,28 @@ public class MyGame : Game
         return true;
     }
 
+    int wave_counter = 1;
+    bool background_changed = false;
     void PlayStateMachine()
     {
         switch (play_state)
         {
             case PlayStates.currentPlay:
+                if (wave_counter % 5 == 0)
+                {
+                    if(wave_counter % 2 == 0)
+                    {
+                        current_background = new Background("sprites/backgrounds/bg2.png");
+                    }
+                    else
+                    {
+                        current_background = new Background("sprites/backgrounds/bg1.png");
+                    }
+                }
                 if (AsteroidContainer.GetChildCount() == 0)
                 {
                     EnterAwaitingWaveState();
+                    wave_counter += 1;
                 }
                 if (player.health <= 0)
                 {

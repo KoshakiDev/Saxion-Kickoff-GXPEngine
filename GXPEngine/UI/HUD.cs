@@ -14,7 +14,7 @@ namespace GXPEngine.UI
 
         private Vector2 health_position;
 
-        //private HeartHUD[] hearts;
+        //private HeartHUD[] hearts = new HeartHUD()[3];
         public int score;
         public int health;
 
@@ -42,6 +42,9 @@ namespace GXPEngine.UI
 
             //Adds canvas to display hierarchy
             AddChild(canvas);
+;
+
+            //AddChild(hearts);
 
             //Starting text
             UpdateCanvas();
@@ -54,9 +57,20 @@ namespace GXPEngine.UI
             score += amount;
             UpdateCanvas();
         }
+        int prev_health = 3;
         public void UpdateHealth(int amount)
         {
             health = amount;
+            /*
+            if(prev_health > health)
+            {
+                SubtractHealth(prev_health - health);
+            }
+            else if (prev_health < health)
+            {
+                AddHealth(health - prev_health);
+            }
+            */
             UpdateCanvas();
         }
 
@@ -116,8 +130,8 @@ namespace GXPEngine.UI
             }
             UpdateCanvas();
         }
+        
         */
-
         private void UpdateCanvas()
         {
             canvas.ClearTransparent();
@@ -137,43 +151,45 @@ namespace GXPEngine.UI
             canvas.Text(health.ToString(), health_position.x, health_position.y);
         }
     }
-    /*
+    
     public class HeartHUD : AnimationSprite
     {
-        public HeartHUD(string filename, int columns, int rows, TiledObject obj) : base("sprites/collectibles/heart/heart.png", 2, 1, 2)
+        string off_path = "sprites/icons/brokenHeart.png";
+        string on_path = "sprites/icons/Heart.png";
+        bool is_on;
+        AnimationSprite off_heart;
+
+        AnimationSprite on_heart;
+        public HeartHUD() : base("sprites/icons/heart_pickup.png", 1, 1, 1)
         {
-            _animationDelay = 120;
-            SetCycle(0, 2, _animationDelay);
+            on_heart = new AnimationSprite(on_path, 1, 1, 1);
+            off_heart = new AnimationSprite(off_path, 1, 1, 1);
+            off_heart.visible = false;
+            is_on = true;
         }
 
         protected void Update()
         {
-            Animate(Time.deltaTime);
         }
 
         public bool IsOn()
         {
-            if (alpha == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return is_on;
         }
 
         public void TurnOff()
         {
-            visible = false;
-            alpha = 0;
+            off_heart.visible = true;
+            on_heart.visible = false;
+            is_on = false;
         }
         public void TurnOn()
         {
-            visible = true;
-            alpha = 1;
+            off_heart.visible = false;
+            on_heart.visible = true;
+            is_on = true;
         }
     
     }
-    */
+    
 }

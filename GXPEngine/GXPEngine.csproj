@@ -46,6 +46,7 @@
     <Compile Include="Entities\GunPickup.cs" />
     <Compile Include="Entities\HealthPickup.cs" />
     <Compile Include="Entities\ItemPickup.cs" />
+    <Compile Include="Entities\ShieldPickup.cs" />
     <Compile Include="GXPEngine\AddOns\Gizmos.cs" />
     <Compile Include="GXPEngine\AddOns\SpriteBatch.cs" />
     <Compile Include="GXPEngine\AddOns\TiledLoader.cs" />

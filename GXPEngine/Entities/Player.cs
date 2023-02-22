@@ -14,6 +14,8 @@ namespace GXPEngine.Entities
         public event Action<int> UpdateHealth;
         private Timer shot_delay_timer;
         private Timer gun_upgrade_timer;
+        private Timer shield_timer;
+        int shield_timer_duration = 8000;
         int gun_upgrade_duration = 8000;
         
         public int gun_upgrade_level = 1;
@@ -21,6 +23,8 @@ namespace GXPEngine.Entities
 
         Pivot gun_pivot;
         Sprite gun;
+
+        Sprite shield;
 
         float friction = 0.0005f;
 
@@ -40,10 +44,15 @@ namespace GXPEngine.Entities
         public Player() : base("sprites/player/player_hitbox.png", 1, 1, 1)
         {
             move_speed = 0.2f;
-            rotation_speed = 2.0f;
+            rotation_speed = 4.0f;
             shot_delay_timer = new Timer(shot_delay_1, true, false);
 
-            
+            shield = new AnimationSprite("sprites/icons/shield.png", 1, 1, 1, false, false);
+            shield.SetOrigin(shield.width / 2, shield.height / 2);
+
+            AddChild(shield);
+            shield.visible = false;
+            is_shield_on = false;
 
             sprite = new AnimationSprite("sprites/player/player1.png", 8, 1, 8, true, false)
             {
@@ -78,6 +87,7 @@ namespace GXPEngine.Entities
 
         public override void Update()
         {
+            shield.rotation += rotation_speed;
             base.Update();
             UpdateVelocity();
             ApplyFriction();
@@ -133,13 +143,13 @@ namespace GXPEngine.Entities
 
             if (Input.GetKey(Key.A) || Input.GetKey(Key.LEFT)) 
             {
-                angle_of_movement += rotation_speed;
+                angle_of_movement -= rotation_speed;
             }
 
             if (Input.GetKey(Key.D) || Input.GetKey(Key.RIGHT))
             {
 
-                angle_of_movement -= rotation_speed;
+                angle_of_movement += rotation_speed;
             }
             if (Input.GetKey(Key.SPACE)) // d
             {
@@ -170,6 +180,20 @@ namespace GXPEngine.Entities
             }
         }
 
+        bool is_shield_on;
+        public void CreateShield()
+        {
+            shield_timer = new Timer(shield_timer_duration, false, false);
+            shield_timer.Timeout += DestroyShield;
+            is_shield_on = true;
+            shield.visible = true;
+
+        }
+        public void DestroyShield()
+        {
+            is_shield_on = false;
+            shield.visible = false;
+        }
         public void UpgradeGun()
         {
             gun_upgrade.Play();
@@ -233,7 +257,7 @@ namespace GXPEngine.Entities
         }
         public override void Damage(int amount)
         {
-            if (immune)
+            if (immune || is_shield_on)
                 return;
             player_damage.Play();
             health -= amount;

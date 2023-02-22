@@ -32,7 +32,7 @@ namespace GXPEngine.Entities
 
             rotation = set_rotation;
 
-            move_speed = 0.25f;
+            move_speed = 1.0f;
             rotation_speed = 0.5f;
 
             timer = new Timer(3000, false, true);
