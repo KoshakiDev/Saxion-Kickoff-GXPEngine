@@ -30,11 +30,10 @@ namespace GXPEngine.Entities
 
         public override void OnCollision(GameObject collider)
         {
-            if(collider is Bullet || collider is Player)
+            if(collider is Bullet || collider is Player || collider is Shield)
             {
                 Sound hit = new Sound("sounds/hit/hit_" + Utils.Random(1, 3) + ".wav");
-
-                hit.Play();
+                hit.Play(false, 5, 0.5f);
                 Damage(1);
             }
         }
@@ -49,6 +48,7 @@ namespace GXPEngine.Entities
 
         public ItemPickup ChooseItem()
         {
+            //if(true)
             if (Utils.Random(1, 100) <= 25)
             {
                 ShieldPickup new_item = new ShieldPickup();
@@ -73,7 +73,7 @@ namespace GXPEngine.Entities
             {
                 DropItem();
             }
-            death.Play();
+            death.Play(false, 5, 0.5f);
             for (int i = 0; i < 10; i++)
             {
                 float speed = 5.0f;

@@ -25,12 +25,21 @@ public class MyGame : Game
     Timer await_wave_timer;
     int await_wave_duration = 2500;
 
-    Sound game_over = new Sound("sounds/game_over.wav");
+    Sound title_music;
+    Sound gameplay_music;
+    Sound game_over;
+
+    SoundChannel title_music_soundChannel;
+
+    SoundChannel gameplay_music_soundChannel;
 
     int current_highscore = 0;
 
     public MyGame() : base(1600, 1200, false, false, 1600 / 2, 1200 / 2, false)
     {
+        title_music = new Sound("sounds/title_music.wav");
+        gameplay_music = new Sound("sounds/gameplay_music.wav");
+        game_over = new Sound("sounds/game_over.wav");
         //LoadLevel(levelname);
         EnterMenuState();
         //EnterLostState();
@@ -67,6 +76,8 @@ public class MyGame : Game
 
     void EnterMenuState()
     {
+        //title_music_soundChannel.IsPaused = false;
+        title_music_soundChannel = title_music.Play();
         current_background = new Background("sprites/backgrounds/startscreenf.png");
         AddChild(current_background);
 
@@ -76,7 +87,7 @@ public class MyGame : Game
     }
     bool MenuState()
     {
-        if (Input.GetMouseButtonDown(0) || Input.GetKey(Key.SPACE))
+        if (Input.GetMouseButtonDown(0) || Input.GetKey(Key.E))
         {
             Sound button_click = new Sound("sounds/button_click/click" + Utils.Random(1, 2) + ".wav");
             button_click.Play();
@@ -87,11 +98,15 @@ public class MyGame : Game
     }
     void ExitMenuState()
     {
+        title_music_soundChannel.IsPaused = true;
+        //title_music_soundChannel = title_music.Play(true, 0, 0);
         RemoveChild(current_background);
         RemoveChild(menu_screen);   
     }
     void EnterPlayState()
     {
+        gameplay_music_soundChannel = gameplay_music.Play();
+
         player = new Player();
         player.x = width / 2;
         player.y = height / 2;
@@ -232,6 +247,8 @@ public class MyGame : Game
 
     void ExitPlayState()
     {
+        gameplay_music_soundChannel.IsPaused = true;
+        
         RemoveChild(player);
         RemoveChild(hud);
         RemoveChild(AsteroidContainer);
@@ -247,6 +264,7 @@ public class MyGame : Game
         //lost_screen = new LostScreen(0);
 
 
+        lost_timer_delay = new Timer(2000);
         current_background = new Background("sprites/backgrounds/gameoverf.png");
         AddChild(current_background);
         AddChild(lost_screen);
@@ -254,14 +272,19 @@ public class MyGame : Game
         game_over.Play();
         state = State.Lost;
     }
+
+    Timer lost_timer_delay;
     bool LostState()
     {
-        if (Input.GetMouseButtonDown(0) || Input.GetKey(Key.SPACE))
+        if (lost_timer_delay.finished || lost_timer_delay == null)
         {
-            Sound button_click = new Sound("sounds/button_click/click" + Utils.Random(1, 2) + ".wav");
-            button_click.Play();
-            ExitLostState();
-            EnterMenuState();
+            if (Input.GetMouseButtonDown(0) || Input.GetKey(Key.E) || Input.GetKey(Key.SPACE))
+            {
+                Sound button_click = new Sound("sounds/button_click/click" + Utils.Random(1, 2) + ".wav");
+                button_click.Play();
+                ExitLostState();
+                EnterMenuState();
+            }
         }
         return true;
     }

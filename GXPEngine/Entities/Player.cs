@@ -24,9 +24,9 @@ namespace GXPEngine.Entities
         Pivot gun_pivot;
         Sprite gun;
 
-        Sprite shield;
+        Shield shield;
 
-        float friction = 0.0005f;
+        float friction = 0.005f;
 
         int shot_delay_1 = 300;
         int shot_delay_2 = 100;
@@ -37,20 +37,22 @@ namespace GXPEngine.Entities
         int immunityDuration = 1000;
 
         
-        Sound health_bonus = new Sound("sounds/health_bonus.wav");
-        Sound gun_upgrade = new Sound("sounds/gun_upgrade.wav");
-        Sound player_damage = new Sound("sounds/player_damage.wav");
+        Sound health_bonus;
+        Sound gun_upgrade;
+        Sound player_damage;
 
         public Player() : base("sprites/player/player_hitbox.png", 1, 1, 1)
         {
+            health_bonus = new Sound("sounds/health_bonus.wav");
+            gun_upgrade = new Sound("sounds/gun_upgrade.wav");
+            player_damage = new Sound("sounds/player_damage.wav");
             move_speed = 0.2f;
             rotation_speed = 4.0f;
             shot_delay_timer = new Timer(shot_delay_1, true, false);
 
-            shield = new AnimationSprite("sprites/icons/shield.png", 1, 1, 1, false, false);
-            shield.SetOrigin(shield.width / 2, shield.height / 2);
-
-            AddChild(shield);
+            shield = new Shield();
+            
+            //AddChild(shield);
             shield.visible = false;
             is_shield_on = false;
 
@@ -73,7 +75,7 @@ namespace GXPEngine.Entities
             gun = new AnimationSprite("sprites/player/gun_1.png", 1, 4, 4, false, false);
             gun.SetOrigin(0, gun.height / 2);
 
-            gun.scaleX = gun.scaleY = DEFAULT_SCALE;
+            gun.scaleX = gun.scaleY = DEFAULT_SCALE * 0.75f;
             gun_pivot.AddChild(gun);
 
             
@@ -127,30 +129,68 @@ namespace GXPEngine.Entities
                 sprite.alpha = Utils.Random(0.4f, 1);
             }
         }
+
+        Vector2 direction = new Vector2(1, 0);
+
+        Vector2 facing_direction = new Vector2(1, 0);
+        
         void UpdateVelocity() // controls of the player
         {
-            gun_pivot.rotation = angle_of_movement;
-            if(health <= 0)
+            //gun_pivot.rotation = angle_of_movement;
+
+            gun_pivot.rotation = angle_of_movement = Mathf.RadiansToDegrees(Mathf.Atan2(facing_direction.y, facing_direction.x));
+            //Console.WriteLine(Mathf.RadiansToDegrees(Mathf.Atan2(direction.y, direction.x)));
+            if (health <= 0)
             {
                 return;
             }
             //Console.WriteLine("rotation: " + rotation);
-            if (Input.GetKey(Key.W) || Input.GetKey(Key.UP))
+            if (Input.GetKey(Key.E))
             {
-                velocity.x = move_speed * Mathf.Cos(Mathf.DegreesToRadians(angle_of_movement));
-                velocity.y = move_speed * Mathf.Sin(Mathf.DegreesToRadians(angle_of_movement));
+                velocity.x = move_speed * facing_direction.x;
+                velocity.y = move_speed * facing_direction.y;
+
+                //velocity.x = move_speed * Mathf.Cos(Mathf.DegreesToRadians(angle_of_movement));
+                //velocity.y = move_speed * Mathf.Sin(Mathf.DegreesToRadians(angle_of_movement));
             }
 
-            if (Input.GetKey(Key.A) || Input.GetKey(Key.LEFT)) 
+         
+
+            if (Input.GetKey(Key.W))
             {
-                angle_of_movement -= rotation_speed;
+                direction.y = -1;
+            }
+            else if (Input.GetKey(Key.S))
+            {
+                direction.y = 1;
+            }
+            else
+            {
+                direction.y = 0;
+            }
+            
+
+            if (Input.GetKey(Key.A)) 
+            {
+                //angle_of_movement -= rotation_speed;
+                direction.x = -1;
+            }
+            else if (Input.GetKey(Key.D))
+            {
+                //angle_of_movement += rotation_speed;
+                direction.x = 1;
+            }
+            else
+            {
+                direction.x = 0;
             }
 
-            if (Input.GetKey(Key.D) || Input.GetKey(Key.RIGHT))
+            if(direction.x != 0 || direction.y != 0)
             {
-
-                angle_of_movement += rotation_speed;
+                facing_direction = direction;
             }
+
+            
             if (Input.GetKey(Key.SPACE)) // d
             {
                 Shoot();
@@ -163,7 +203,7 @@ namespace GXPEngine.Entities
             if(shot_delay_timer.IsPaused)
             {
                 Sound gunshot = new Sound("sounds/gunshot/gunshot_" + Utils.Random(1, 4) + ".wav");
-                gunshot.Play();
+                gunshot.Play(false, 15, 0.5f);
                 switch(gun_upgrade_level)
                 {
                     case 1:
@@ -183,6 +223,10 @@ namespace GXPEngine.Entities
         bool is_shield_on;
         public void CreateShield()
         {
+            if (is_shield_on)
+                return;
+            LateAddChild(shield);
+
             shield_timer = new Timer(shield_timer_duration, false, false);
             shield_timer.Timeout += DestroyShield;
             is_shield_on = true;
@@ -191,12 +235,13 @@ namespace GXPEngine.Entities
         }
         public void DestroyShield()
         {
+            RemoveChild(shield);
             is_shield_on = false;
             shield.visible = false;
         }
         public void UpgradeGun()
         {
-            gun_upgrade.Play();
+            gun_upgrade.Play(false, 15, 0.5f);
             gun_upgrade_timer = new Timer(gun_upgrade_duration, false, false);
 
             gun_upgrade_timer.Timeout += DegradeGun;
@@ -251,7 +296,7 @@ namespace GXPEngine.Entities
 
         public override void Heal(int amount)
         {
-            health_bonus.Play();
+            health_bonus.Play(false, 15, 0.5f);
             base.Heal(amount);
             UpdateHealth?.Invoke(health);
         }
@@ -259,7 +304,7 @@ namespace GXPEngine.Entities
         {
             if (immune || is_shield_on)
                 return;
-            player_damage.Play();
+            player_damage.Play(false, 16, 0.5f);
             health -= amount;
             immunity_timer = new Timer(immunityDuration);
             immune = true;

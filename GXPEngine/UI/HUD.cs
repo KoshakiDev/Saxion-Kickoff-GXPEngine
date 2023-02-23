@@ -15,6 +15,7 @@ namespace GXPEngine.UI
         private Vector2 health_position;
 
         //private HeartHUD[] hearts = new HeartHUD()[3];
+        AnimationSprite heart_icon;
         public int score;
         public int health;
 
@@ -31,9 +32,12 @@ namespace GXPEngine.UI
             score = 0;
             score_position = new Vector2(32, 16);
 
-            health_position = new Vector2(32, 48);
+            health_position = new Vector2(64, 48);
 
-
+            heart_icon = new AnimationSprite("sprites/icons/Heart.png", 1, 1, 1);
+            heart_icon.scaleX = heart_icon.scaleY = 0.1f;
+            heart_icon.x = 32;
+            heart_icon.y = 48;
             //Canvas properties
 
             canvas.TextSize(28);
@@ -41,6 +45,7 @@ namespace GXPEngine.UI
             canvas.TextAlign(CenterMode.Min, CenterMode.Min);
 
             //Adds canvas to display hierarchy
+            AddChild(heart_icon);
             AddChild(canvas);
 ;
 
