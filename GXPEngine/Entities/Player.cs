@@ -43,8 +43,8 @@ namespace GXPEngine.Entities
 
         public Player() : base("sprites/player/player_hitbox.png", 1, 1, 1)
         {
-            health_bonus = new Sound("sounds/health_bonus.wav");
-            gun_upgrade = new Sound("sounds/gun_upgrade.wav");
+            health_bonus = new Sound("sounds/pickup.wav");
+            gun_upgrade = new Sound("sounds/pickup.wav");
             player_damage = new Sound("sounds/player_damage.wav");
             move_speed = 0.2f;
             rotation_speed = 4.0f;
@@ -225,6 +225,8 @@ namespace GXPEngine.Entities
         {
             if (is_shield_on)
                 return;
+
+            gun_upgrade.Play(false, 15, 0.5f);
             LateAddChild(shield);
 
             shield_timer = new Timer(shield_timer_duration, false, false);
